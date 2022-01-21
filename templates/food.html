@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="title">
+  This food, {{ name }}
+</h1>
+<table width="80%" align="center" border="1">
+         <thead>
+            <tr height="40">
+               <th>Name</th>
+               <th>City</th>
+
+            </tr>
+         </thead>
+
+         <tbody>
+{% for food in foods %}
+               <tr  height="40">
+                  <td>{{ food.food_name }}</td>
+                  <td>{{ food.id }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+</table>
+{% endblock %}

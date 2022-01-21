@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<script type="text/javascript" src="./static/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="./static/easyui/jquery.easyui.min.js"></script>
+
+    <h3 class="title is-3">Food Web Application Admin -- Food Manage
+    </h3>
+    <h4 class="subtitle is-4">
+        Welcome, {{ name }}
+    </h4>
+
+<div class="column is-10 is-offset-1"></div>
+	<table id="dg" title="Food Manage" class="easyui-datagrid" style="width:900px;height:460px"
+			url="/query_food"
+			toolbar="#toolbar" pagination="true"
+			rownumbers="true" fitColumns="true" singleSelect="true">
+		<thead>
+			<tr>
+				<th field="id" width="50">ID</th>
+				<th field="food_name" width="50">Food Name</th>
+			</tr>
+		</thead>
+	</table>
+	<div id="toolbar">
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="new_item()">New Food</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit_item()">Edit Food</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="delete_item()">Delete Food</a>
+	</div>
+
+	<div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+		<form id="fm" method="post" novalidate style="margin:0;padding:20px 50px">
+			<h3>Food Manage</h3>
+			<div style="margin-bottom:10px">
+				<input id="id" name="id" class="easyui-textbox" required="true" label="Id:" style="width:100%" readonly="readonly" >
+			</div>
+			<div style="margin-bottom:10px">
+				<input name="food_name" class="easyui-textbox" required="true" label="Food Name:" style="width:100%">
+			</div>
+
+		</form>
+	</div>
+	<div id="dlg-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+	</div>
+	<script type="text/javascript">
+		var url;
+		function new_item(){
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','New Food');
+			$('#fm').form('clear');
+			$("#id").textbox("setValue","0");
+			url = '/add_food';
+		}
+		function edit_item(){
+			var row = $('#dg').datagrid('getSelected');
+			if (row){
+				$('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit Food');
+				$('#fm').form('load',row);
+				url = '/update_food?id='+row.id;
+			}
+		}
+		function save(){
+			$('#fm').form('submit',{
+				url: url,
+				onSubmit: function(){
+					return $(this).form('validate');
+				},
+				success: function(result){
+					var result = eval('('+result+')');
+					if (result.errorMsg){
+						$.messager.show({
+							title: 'Error',
+							msg: result.errorMsg
+						});
+					} else {
+						$('#dlg').dialog('close');		// close the dialog
+						$('#dg').datagrid('reload');	// reload the user data
+					}
+				}
+			});
+		}
+		function delete_item(){
+			var row = $('#dg').datagrid('getSelected');
+			if (row){
+				$.messager.confirm('Confirm','Are you sure you want to destroy this food?',function(r){
+					if (r){
+						$.post('/delete_food',{id:row.id},function(result){
+							if (result.success){
+								$('#dg').datagrid('reload');	// reload the user data
+							} else {
+								$.messager.show({	// show error message
+									title: 'Error',
+									msg: result.errorMsg
+								});
+							}
+						},'json');
+					}
+				});
+			}
+		}
+	</script>
+{% endblock %}

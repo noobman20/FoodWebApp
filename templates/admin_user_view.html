@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<script type="text/javascript" src="./static/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="./static/easyui/jquery.easyui.min.js"></script>
+
+    <h3 class="title is-3">Food Web Application Admin -- User View
+    </h3>
+    <h4 class="subtitle is-4">
+        Welcome, {{ name }}
+    </h4>
+
+<div class="column is-10 is-offset-1"></div>
+	<table id="dg" title="User View" class="easyui-datagrid" style="width:900px;height:460px"
+			url="/query_user"
+			toolbar="#toolbar" pagination="true"
+			rownumbers="true" fitColumns="true" singleSelect="true">
+		<thead>
+			<tr>
+				<th field="id" width="20">ID</th>
+				<th field="firstname" width="30">First Name</th>
+				<th field="lastname" width="30">Last Name</th>
+				<th field="email" width="30">Email</th>
+				<th field="phone" width="30">Phone</th>
+				<th field="role" width="20">Role</th>
+			</tr>
+		</thead>
+	</table>
+
+{% endblock %}

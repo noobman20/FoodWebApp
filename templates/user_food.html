@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+	<script type="text/javascript" src="./static/easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="./static/easyui/jquery.easyui.min.js"></script>
+
+    <h3 class="title is-3">Food Web Application User -- Taken Food
+    </h3>
+
+<h1 class="title">
+    <img src="static/food2.png"><br>
+  Here you can choose up to five kinds of food every day, {{ name }}
+</h1>
+
+
+<div class="column is-10 is-offset-1"></div>
+<table><tr><td>
+	<table id="dg" title=" food" class="easyui-datagrid" style="width:600px;height:460px"
+			url="/query_post"
+			toolbar="#toolbar" pagination="true"
+			rownumbers="true" fitColumns="true" singleSelect="true">
+		<thead>
+			<tr>
+				<th field="id" width="50">ID</th>
+				<th field="food_name" width="50">Food Name</th>
+				<th field="place_name" width="50">Place Name</th>
+				<th field="amount" width="50">Amount</th>
+				<th field="post_time" width="50">Post Time</th>
+			</tr>
+		</thead>
+	</table>
+</td><td width="10"> </td><td>
+	<table id="dg1" title="The food I have chosen today" class="easyui-datagrid" style="width:600px;height:460px"
+			url="/query_taken"
+			toolbar="#toolbar1" pagination="true"
+			rownumbers="true" fitColumns="true" singleSelect="true">
+		<thead>
+			<tr>
+				<th field="id" width="50">ID</th>
+				<th field="food_name" width="50">Food Name</th>
+				<th field="place_name" width="50">Place Name</th>
+				<th field="amount" width="50">Amount</th>
+				<th field="post_time" width="50">Post Time</th>
+			</tr>
+		</thead>
+	</table>
+</td></tr></table>
+	<div id="toolbar">
+
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="delete_item()">Taken Food</a>
+	</div>
+
+	<script type="text/javascript">
+		var url;
+
+
+		function delete_item(){
+			var row = $('#dg').datagrid('getSelected');
+			if (row){
+				$.messager.confirm('Confirm','Are you sure you want to take this food?',function(r){
+					if (r){
+						$.post('/taken_post',{id:row.id},function(result){
+							if (result.success){
+								$('#dg').datagrid('reload');
+								$('#dg1').datagrid('reload');// reload the user data
+							} else {
+								$.messager.show({	// show error message
+									title: 'Error',
+									msg: result.errorMsg
+								});
+							}
+						},'json');
+					}
+				});
+			}
+		}
+	</script>
+{% endblock %}

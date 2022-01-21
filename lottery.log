@@ -1,0 +1,7 @@
+01/21/2022 01:44:40 AM : SECURITY - Log in [5, b@email.com, 127.0.0.1]
+01/21/2022 01:47:29 AM : SECURITY - Log out [5, b@email.com, 127.0.0.1]
+01/21/2022 01:47:34 AM : SECURITY - Log in [3, a@email.com, 127.0.0.1]
+01/21/2022 01:49:20 AM : SECURITY - Log out [3, a@email.com, 127.0.0.1]
+01/21/2022 01:49:26 AM : SECURITY - Log in [5, b@email.com, 127.0.0.1]
+01/21/2022 01:49:35 AM : SECURITY - Log out [5, b@email.com, 127.0.0.1]
+01/21/2022 01:49:46 AM : SECURITY - Log in [5, b@email.com, 127.0.0.1]
